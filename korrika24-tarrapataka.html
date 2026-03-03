@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="eu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tarrapataka · 24. Korrika — Jardueren gida kurtsoka</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --laranja: #f38700;
+  --morea: #d8aaf6;
+  --more-iluna: #a855c7;
+  --beltza: #1a1a1a;
+  --zuria: #fafafa;
+  --grisa-1: #f2f0ed;
+  --grisa-2: #e5e2dc;
+  --grisa-3: #999;
+  --berdea: #22c55e;
+  --berde-bg: #dcfce7;
+  --horia: #eab308;
+  --hori-bg: #fef9c3;
+  --testua: #1a1a1a;
+  --itzala: rgba(0,0,0,0.06);
+  --radius: 12px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'DM Sans',system-ui,sans-serif; background:var(--zuria); color:var(--testua); line-height:1.55; }
+
+/* HEADER */
+.header { background:var(--beltza); color:white; padding:2.5rem 2rem 2rem; position:relative; overflow:hidden; }
+.header::before { content:''; position:absolute; width:600px; height:600px; background:radial-gradient(circle,var(--laranja) 0%,transparent 70%); top:-300px; right:-100px; opacity:0.25; pointer-events:none; }
+.header::after { content:''; position:absolute; width:400px; height:400px; background:radial-gradient(circle,var(--morea) 0%,transparent 70%); bottom:-200px; left:10%; opacity:0.2; pointer-events:none; }
+.header-inner { max-width:1300px; margin:0 auto; position:relative; z-index:1; display:flex; align-items:flex-end; justify-content:space-between; gap:2rem; flex-wrap:wrap; }
+.header-text h1 { font-family:'Syne',sans-serif; font-weight:800; font-size:clamp(1.8rem,4vw,2.8rem); letter-spacing:-1.5px; line-height:1.05; }
+.header-text h1 .lar { color:var(--laranja); }
+.header-text h1 .mor { color:var(--morea); }
+.header-text .sub { font-size:0.95rem; font-weight:300; margin-top:0.5rem; opacity:0.7; max-width:500px; }
+.header-meta { display:flex; gap:0.5rem; flex-wrap:wrap; }
+.meta-chip { font-family:'Syne',sans-serif; font-size:0.68rem; font-weight:600; letter-spacing:0.5px; text-transform:uppercase; padding:0.35rem 0.8rem; border-radius:100px; border:1px solid rgba(255,255,255,0.15); background:rgba(255,255,255,0.06); white-space:nowrap; }
+.meta-chip.lar-bg { background:var(--laranja); border-color:var(--laranja); }
+.meta-chip.mor-bg { background:var(--more-iluna); border-color:var(--more-iluna); }
+
+/* NAV/FILTERS */
+.nav { max-width:1300px; margin:0 auto; padding:1.2rem 2rem 0; }
+.filter-row { display:flex; gap:0.8rem; align-items:center; flex-wrap:wrap; }
+.filter-label { font-family:'Syne',sans-serif; font-weight:700; font-size:0.72rem; text-transform:uppercase; letter-spacing:1px; color:var(--grisa-3); flex-shrink:0; }
+.filter-pills { display:flex; gap:5px; flex-wrap:wrap; }
+.pill { font-family:'DM Sans',sans-serif; font-size:0.78rem; font-weight:500; padding:0.4rem 0.9rem; border-radius:100px; border:1.5px solid var(--grisa-2); background:white; cursor:pointer; transition:all 0.2s; white-space:nowrap; }
+.pill:hover { border-color:var(--laranja); color:var(--laranja); }
+.pill.active { background:var(--beltza); color:white; border-color:var(--beltza); }
+.pill.active-sub { background:var(--more-iluna); color:white; border-color:var(--more-iluna); }
+.divider { width:1px; height:24px; background:var(--grisa-2); flex-shrink:0; }
+
+/* LEGEND */
+.legend-bar { max-width:1300px; margin:0 auto; padding:0.8rem 2rem 0; display:flex; gap:1.2rem; align-items:center; font-size:0.78rem; color:var(--grisa-3); flex-wrap:wrap; }
+.legend-item { display:flex; align-items:center; gap:5px; }
+.legend-dot { width:14px; height:14px; border-radius:4px; flex-shrink:0; }
+.legend-dot.g { background:var(--berdea); }
+.legend-dot.y { background:var(--horia); }
+.legend-dot.n { background:var(--grisa-2); }
+
+/* TABLE */
+.table-wrap { max-width:1300px; margin:1rem auto 0; padding:0 2rem; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+table { width:100%; border-collapse:separate; border-spacing:0; min-width:900px; }
+thead th { font-family:'Syne',sans-serif; font-weight:700; font-size:0.78rem; text-transform:uppercase; letter-spacing:0.5px; padding:0.8rem 0.6rem; text-align:center; background:var(--grisa-1); border-bottom:2px solid var(--grisa-2); position:sticky; top:0; z-index:10; }
+thead th:first-child { text-align:left; padding-left:1rem; min-width:260px; border-radius:var(--radius) 0 0 0; }
+thead th:last-child { border-radius:0 var(--radius) 0 0; }
+tbody tr { cursor:pointer; transition:background 0.15s; }
+tbody tr:hover { background:rgba(243,135,0,0.04); }
+tbody tr.active-row { background:rgba(243,135,0,0.08); }
+tbody tr.connected-row { background:rgba(216,170,246,0.12); }
+tbody td { padding:0.65rem 0.6rem; border-bottom:1px solid var(--grisa-2); text-align:center; vertical-align:middle; font-size:0.85rem; transition:opacity 0.3s; }
+tbody td:first-child { text-align:left; padding-left:1rem; }
+tbody td.dimmed { opacity:0.15; }
+.act-name-cell { display:flex; align-items:center; gap:0.6rem; }
+.act-num { font-family:'Syne',sans-serif; font-weight:800; font-size:1.1rem; color:var(--laranja); min-width:28px; }
+.act-label { font-weight:600; font-size:0.85rem; letter-spacing:-0.2px; }
+.act-subjects { display:flex; gap:3px; margin-top:2px; flex-wrap:wrap; }
+.tiny-tag { font-size:0.6rem; font-weight:500; padding:1px 5px; border-radius:4px; background:var(--grisa-1); color:var(--grisa-3); }
+.cell-dot { display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:8px; font-size:0.75rem; font-weight:700; transition:transform 0.2s; }
+.cell-dot:hover { transform:scale(1.2); }
+.cell-dot.green { background:var(--berde-bg); color:#16a34a; }
+.cell-dot.yellow { background:var(--hori-bg); color:#a16207; }
+.cell-dot.empty { background:var(--grisa-1); color:var(--grisa-2); }
+
+/* DETAIL PANEL */
+.detail-panel { max-width:1300px; margin:0 auto; padding:0 2rem; overflow:hidden; max-height:0; transition:max-height 0.45s ease; }
+.detail-panel.open { max-height:2000px; }
+.detail-inner { background:white; border:2px solid var(--laranja); border-radius:var(--radius); margin:1rem 0; padding:1.5rem; box-shadow:0 8px 30px rgba(243,135,0,0.1); position:relative; }
+.detail-close { position:absolute; top:1rem; right:1rem; width:32px; height:32px; border-radius:50%; border:none; background:var(--grisa-1); cursor:pointer; font-size:1.1rem; display:flex; align-items:center; justify-content:center; transition:background 0.2s; }
+.detail-close:hover { background:var(--grisa-2); }
+.detail-header { display:flex; align-items:baseline; gap:0.8rem; margin-bottom:1rem; padding-right:2.5rem; }
+.detail-header .d-num { font-family:'Syne',sans-serif; font-weight:800; font-size:2rem; color:var(--laranja); }
+.detail-header .d-title { font-family:'Syne',sans-serif; font-weight:700; font-size:1.4rem; letter-spacing:-0.5px; }
+.detail-desc { font-size:0.92rem; color:#444; max-width:750px; margin-bottom:1.2rem; line-height:1.6; }
+.detail-meta-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:0.8rem; margin-bottom:1.5rem; }
+.meta-card { background:var(--grisa-1); border-radius:10px; padding:0.8rem 1rem; }
+.meta-card .mc-label { font-family:'Syne',sans-serif; font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; color:var(--grisa-3); margin-bottom:0.3rem; }
+.meta-card .mc-value { font-size:0.88rem; font-weight:500; }
+.level-notes-title { font-family:'Syne',sans-serif; font-weight:700; font-size:0.9rem; margin-bottom:0.6rem; color:var(--beltza); }
+.level-notes-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:0.6rem; margin-bottom:1rem; }
+.ln-card { border-radius:10px; padding:0.7rem 0.9rem; border-left:4px solid; font-size:0.82rem; line-height:1.5; }
+.ln-card.ln-green { background:var(--berde-bg); border-color:var(--berdea); }
+.ln-card.ln-yellow { background:var(--hori-bg); border-color:var(--horia); }
+.ln-card .ln-level { font-family:'Syne',sans-serif; font-weight:700; font-size:0.72rem; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:0.2rem; }
+.conn-section { margin-top:1rem; padding-top:1rem; border-top:1px solid var(--grisa-2); }
+.conn-title { font-family:'Syne',sans-serif; font-weight:700; font-size:0.75rem; text-transform:uppercase; letter-spacing:0.8px; color:var(--more-iluna); margin-bottom:0.5rem; }
+.conn-pills { display:flex; gap:6px; flex-wrap:wrap; }
+.conn-pill { font-size:0.78rem; font-weight:600; padding:0.35rem 0.8rem; border-radius:100px; background:rgba(216,170,246,0.15); color:var(--more-iluna); border:1px solid rgba(168,85,199,0.2); cursor:pointer; transition:all 0.2s; }
+.conn-pill:hover { background:var(--more-iluna); color:white; }
+
+/* SECTIONS */
+.section { max-width:1300px; margin:2.5rem auto 0; padding:0 2rem; }
+.section-title { font-family:'Syne',sans-serif; font-weight:800; font-size:1.5rem; letter-spacing:-0.5px; margin-bottom:1rem; display:flex; align-items:center; gap:0.6rem; }
+.section-title .accent { width:6px; height:28px; border-radius:3px; flex-shrink:0; }
+.criteria-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(340px,1fr)); gap:1rem; }
+.criteria-card { background:white; border:1.5px solid var(--grisa-2); border-radius:var(--radius); padding:1.2rem; transition:border-color 0.2s; }
+.criteria-card:hover { border-color:var(--laranja); }
+.cc-header { display:flex; align-items:center; gap:0.6rem; margin-bottom:0.6rem; }
+.cc-badge { font-family:'Syne',sans-serif; font-weight:800; font-size:0.75rem; padding:0.3rem 0.7rem; border-radius:8px; color:white; }
+.cc-badge.b1 { background:#2A9D8F; }
+.cc-badge.b2 { background:#E9C46A; color:#333; }
+.cc-badge.b3 { background:#F4A261; }
+.cc-badge.b4 { background:#E76F51; }
+.cc-badge.bb1 { background:#E63946; }
+.cc-badge.bb2 { background:#264653; }
+.cc-title { font-weight:700; font-size:0.95rem; }
+.cc-body { font-size:0.85rem; color:#555; line-height:1.6; }
+.conn-map { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:0.8rem; }
+.conn-card { background:rgba(216,170,246,0.08); border:1.5px solid rgba(216,170,246,0.25); border-radius:var(--radius); padding:1rem; }
+.conn-card-title { font-family:'Syne',sans-serif; font-weight:700; font-size:0.85rem; color:var(--more-iluna); margin-bottom:0.3rem; }
+.conn-card-desc { font-size:0.82rem; color:#555; line-height:1.5; }
+
+/* FOOTER */
+.footer { max-width:1300px; margin:3rem auto 0; padding:1.5rem 2rem 2rem; border-top:1px solid var(--grisa-2); text-align:center; font-size:0.75rem; color:var(--grisa-3); }
+.footer a { color:var(--laranja); text-decoration:none; }
+.footer a:hover { text-decoration:underline; }
+
+/* RESPONSIVE */
+@media (max-width:768px) {
+  .header { padding:1.5rem 1rem; }
+  .header-inner { flex-direction:column; align-items:flex-start; }
+  .nav,.table-wrap,.section,.legend-bar { padding-left:1rem; padding-right:1rem; }
+  .detail-inner { padding:1rem; }
+  .criteria-grid,.conn-map { grid-template-columns:1fr; }
+  .level-notes-grid { grid-template-columns:1fr; }
+  .detail-meta-grid { grid-template-columns:1fr 1fr; }
+}
+
+/* ANIMATIONS */
+@keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+tbody tr { animation:fadeIn 0.3s ease both; }
+tbody tr:nth-child(1){animation-delay:0s} tbody tr:nth-child(2){animation-delay:.02s} tbody tr:nth-child(3){animation-delay:.04s} tbody tr:nth-child(4){animation-delay:.06s} tbody tr:nth-child(5){animation-delay:.08s} tbody tr:nth-child(6){animation-delay:.1s} tbody tr:nth-child(7){animation-delay:.12s} tbody tr:nth-child(8){animation-delay:.14s} tbody tr:nth-child(9){animation-delay:.16s} tbody tr:nth-child(10){animation-delay:.18s} tbody tr:nth-child(11){animation-delay:.2s} tbody tr:nth-child(12){animation-delay:.22s} tbody tr:nth-child(13){animation-delay:.24s} tbody tr:nth-child(14){animation-delay:.26s}
+
+@media print {
+  .nav,.legend-bar,.detail-panel,.filter-row,.footer { display:none; }
+  .header { background:white; color:black; padding:1rem; }
+  .header::before,.header::after { display:none; }
+  .header-text h1 .lar,.header-text h1 .mor { color:black; }
+  table { min-width:auto; font-size:0.75rem; }
+  .cell-dot { width:22px; height:22px; font-size:0.65rem; }
+  .section { margin-top:1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="header-text">
+      <h1>Tarrapataka · <span class="lar">24. Korrika</span><br><span class="mor">Jardueren gida kurtsoka</span></h1>
+      <p class="sub">14 jarduera, 6 ikasmaila (DBH1–Batxi2). Irakasleentzako sailkapen pedagogikoa: konplexutasuna, autonomia eta gaitasunen arabera.</p>
+    </div>
+    <div class="header-meta">
+      <span class="meta-chip lar-bg">Euskara gara</span>
+      <span class="meta-chip mor-bg">Errigora omenaldia</span>
+      <span class="meta-chip">14 jarduera</span>
+      <span class="meta-chip">12-18 urte</span>
+    </div>
+  </div>
+</header>
+
+<nav class="nav">
+  <div class="filter-row">
+    <span class="filter-label">Kurtsoa</span>
+    <div class="filter-pills" id="levelFilters"></div>
+    <div class="divider"></div>
+    <span class="filter-label">Arloa</span>
+    <div class="filter-pills" id="subjectFilters"></div>
+  </div>
+</nav>
+
+<div class="legend-bar">
+  <div class="legend-item"><div class="legend-dot g"></div> Oso gomendatua</div>
+  <div class="legend-item"><div class="legend-dot y"></div> Egokigarria</div>
+  <div class="legend-item"><div class="legend-dot n"></div> Ez gomendatua</div>
+  <span style="margin-left:auto;font-size:0.75rem;color:var(--grisa-3)">▸ Klikatu jarduera bat xehetasunak ikusteko</span>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead><tr id="tableHead"></tr></thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+</div>
+
+<div class="detail-panel" id="detailPanel">
+  <div class="detail-inner" id="detailInner"></div>
+</div>
+
+<div class="section" id="criteriaSection">
+  <div class="section-title"><span class="accent" style="background:var(--laranja)"></span> Irizpide pedagogikoak kurtsoka</div>
+  <div class="criteria-grid" id="criteriaGrid"></div>
+</div>
+
+<div class="section" id="connSection">
+  <div class="section-title"><span class="accent" style="background:var(--more-iluna)"></span> Jardueren arteko loturak</div>
+  <div class="conn-map" id="connMap"></div>
+</div>
+
+<footer class="footer">
+  Iturria: <a href="https://www.korrika.eus/unitate-didaktikoak/24-korrika/tarrapataka-12-18-urte.html" target="_blank">korrika.eus — Tarrapataka (12-18 urte)</a><br>
+  Sailkapen pedagogikoa: Borja Goñi · Barrutialde BHI (Arratzu, Urdaibai) · 2026<br>
+  <span style="opacity:0.6">Webguneak ez du sailkapen ofizialik ematen; hau proposamen pedagogikoa da.</span>
+</footer>
+
+<script>
+const LEVELS = [
+  {id:'dbh1',name:'DBH1',long:'DBH1 (12-13)',age:'12-13 urte'},
+  {id:'dbh2',name:'DBH2',long:'DBH2 (13-14)',age:'13-14 urte'},
+  {id:'dbh3',name:'DBH3',long:'DBH3 (14-15)',age:'14-15 urte'},
+  {id:'dbh4',name:'DBH4',long:'DBH4 (15-16)',age:'15-16 urte'},
+  {id:'batxi1',name:'BATXI1',long:'Batxi1 (16-17)',age:'16-17 urte'},
+  {id:'batxi2',name:'BATXI2',long:'Batxi2 (17-18)',age:'17-18 urte'},
+];
+
+const SUBJECTS = [
+  {id:'euskara',name:'Euskara',color:'#f38700'},
+  {id:'musika',name:'Musika',color:'#8b5cf6'},
+  {id:'gorphez',name:'Gorputz Hez.',color:'#22c55e'},
+  {id:'artea',name:'Arte Plastikoa',color:'#ec4899'},
+  {id:'gizarte',name:'Gizarte Zientz.',color:'#3b82f6'},
+  {id:'tutoritza',name:'Tutoritza / Herrit.',color:'#f59e0b'},
+  {id:'ikt',name:'IKT / Digitala',color:'#6366f1'},
+];
+
+const ACTS = [
+  {
+    id:1, name:'ZER DA KORRIKA?',
+    desc:'Ideien ekaitza talde txikietan Korrikari buruz: zer den, helburuak, lema ("Euskara gara"), manifestua irakurri, kartelak sortu. Aurreko edizioen memoria berreskuratu.',
+    subjects:['euskara','tutoritza','artea'],
+    grouping:'Talde txikia + talde handia',
+    duration:'1-2 saio',
+    resources:['Manifestua (weba)','Kartoi eta margoak'],
+    levels:{
+      dbh1:{fit:'g',note:'Ideien ekaitza gidatua, Korrikaren oinarrizko kontzeptuak, kartelak marraztu.'},
+      dbh2:{fit:'g',note:'Manifestua irakurri eta komentatu, kontzeptu gehiago landu.'},
+      dbh3:{fit:'g',note:'Hausnarketa sakonagoa, aurreko edizioen konparaketa.'},
+      dbh4:{fit:'g',note:'Manifestuaren analisi kritikoa, «Euskara gara» esanahia jorratu.'},
+      batxi1:{fit:'g',note:'Lema eta manifestuaren interpretazio soziolinguistikoa.'},
+      batxi2:{fit:'g',note:'Hausnarketa sakona euskararen egoerari eta konpromisoari buruz.'},
+    },
+    connections:[14],
+    connDesc:'Unitatea irekitzen du; 14. jarduerak (Hurrengora arte!) ixten du. Zikloa osatzen dute.'
+  },
+  {
+    id:2, name:'KANTA',
+    desc:'Zeta taldearen "Xiberutikan Mendebaldera" bideoklipa ikusi. Ulermen-fitxa hutsuneekin, 10 galderako ikerketa kulturala, eta musikograma perkusioarekin (klabeak, pandereta, txalaparta...). Korrikaraokea eta Bingo Musikala Multimedia atalean.',
+    subjects:['euskara','musika'],
+    grouping:'Talde handia + talde txikia',
+    duration:'1-3 saio',
+    resources:['Bideoklipa (weba)','Hutsuneen fitxa (Drive)','Partiturak (baliabideak)','Korrikaraoke / Bingo Musikala'],
+    levels:{
+      dbh1:{fit:'g',note:'Bideoklipa ikusi, hutsuneak bete, musikograma perkusioarekin jo.'},
+      dbh2:{fit:'g',note:'Ulermen sakona + ikerketa kulturala (10 galdera). Musikograma.'},
+      dbh3:{fit:'g',note:'Ikerketa kulturala osoa + bertsioa sortu tresna bereziekin.'},
+      dbh4:{fit:'g',note:'Bertsioa sortu instrumentu esperimentalekin, grabatu.'},
+      batxi1:{fit:'g',note:'Kantak aipatzen dituen erreferentzia kulturalen analisi sakona.'},
+      batxi2:{fit:'g',note:'Kanta testuinguru soziolinguistikoan kokatu, Pello Reparazen lana aztertu.'},
+    },
+    connections:[11],
+    connDesc:'Kanta bera erabiltzen da 11. jarduerako (Plazara dantzara!) koreografian.'
+  },
+  {
+    id:3, name:'IPUINA',
+    desc:'Goiatz Labandibarren "Gar eta Kea" ipuina entzun (bideoa azpitituluekin). Ulermena, eztabaida, egilearen ikerketa, euskararen aldeko ekimenak identifikatu. Proiektu nagusia: antzerki kooperatiboa ikasle txikientzat (gidoigileak, aktoreak, eszenografia, produkzioa).',
+    subjects:['euskara','artea','tutoritza'],
+    grouping:'Talde handia + talde espezializatuak',
+    duration:'Hainbat aste (proiektua)',
+    resources:['Bideoa azpitituluekin (weba)','Aizu! aldizkaria (AEK)'],
+    levels:{
+      dbh1:{fit:'n',note:''},
+      dbh2:{fit:'y',note:'Ipuina entzun, ulertu eta eztabaidatu. Egilearen ikerketa oinarrizkoa.'},
+      dbh3:{fit:'g',note:'Antzerki proiektu kooperatibo osoa: gidoia, antzezpena, eszenografia, produkzioa. Kidetze bidez ikasle txikiekin.'},
+      dbh4:{fit:'g',note:'Antzerki proiektua autonomia handiagoz. Ikerketa sakona egileari buruz.'},
+      batxi1:{fit:'y',note:'Ipuinaren analisi literarioa eta euskararen aldeko ekimenen ikerketa.'},
+      batxi2:{fit:'n',note:''},
+    },
+    connections:[13],
+    connDesc:'Kidetze programa bidez, antzezlana ikasle txikientzat prestatzen da; Korrika Gaztean (13.) aurkeztu daiteke.'
+  },
+  {
+    id:4, name:'IBILBIDEA',
+    desc:'24. Korrikaren ibilbidea jarraitu: 2.175 km, ~460 herri, 11 egun eta 10 gau gelditu gabe. Mapa handi bat jarri gelan eta egunerokoa eguneratu argazki eta deskribapenez.',
+    subjects:['gizarte','euskara','ikt'],
+    grouping:'Talde handia (jarduera jarraitua)',
+    duration:'11 egunean zehar',
+    resources:['Mapak (deskargagarriak)','Korrikaren weba (zuzenekoa)'],
+    levels:{
+      dbh1:{fit:'g',note:'Mapa fisikoan ibilbidea jarraitu, herriak kokatu eta identifikatu.'},
+      dbh2:{fit:'g',note:'Herrien deskribapenak idatzi, argazkiak bilatu.'},
+      dbh3:{fit:'g',note:'Datu geografikoak eta demografikoak aztertu, mapa digitala osatu.'},
+      dbh4:{fit:'g',note:'Herrien arteko lotura soziolinguistikoak identifikatu.'},
+      batxi1:{fit:'g',note:'Ibilbidearen analisi geografikoa eta soziolinguistikoa.'},
+      batxi2:{fit:'g',note:'Lurralde plangintza eta hizkuntza politikarekin lotu.'},
+    },
+    connections:[],
+    connDesc:''
+  },
+  {
+    id:5, name:'MEZUA',
+    desc:'Lekukoaren mezu sekretuak inspiratuta: «euskara/gara» errimarekin kopla bat sortu. Kopla bikoitza / zortziko txikia idazteko aukera. Melodia tradizionalekin kantatu: "Ama begira zazu", "Maritxu nora zoaz"...',
+    subjects:['euskara','musika'],
+    grouping:'Banakakoa + talde handia',
+    duration:'1 saio',
+    resources:['Koplaren txantiloia (Drive)','bertsoa.eus ataria'],
+    levels:{
+      dbh1:{fit:'n',note:''},
+      dbh2:{fit:'y',note:'Kopla sinplea «euskara/gara» errimarekin, melodia ezagun batekin kantatu.'},
+      dbh3:{fit:'y',note:'Kopla hobetua, errima zainduz eta irudikapen poetikoagoarekin.'},
+      dbh4:{fit:'g',note:'Zortziko txikia osoa. Bertsolarismoaren oinarriak landu.'},
+      batxi1:{fit:'y',note:'Bertsolarismoa eta ahozko ondarea. Kopla konplexuak.'},
+      batxi2:{fit:'g',note:'Bertsolarismoa ondare immaterial gisa. Sorkuntza sakona eta emanaldia.'},
+    },
+    connections:[8],
+    connDesc:'Sortutako bertsoak 8. jarduerarekin (Lekukoa) elkartuz, mural artistiko integratu bat sortzen da.'
+  },
+  {
+    id:6, name:'IHES-GELA',
+    desc:'Ihes-gela birtuala binaka edo hirunaka: Atharratzetik (24. Korrikaren abiapuntua) Bilbora iritsi. Galderak euskal kulturari, musikari, ibilbideko herriei eta artistei buruz. QR txartelak gelarako bertsio presentzialerako.',
+    subjects:['euskara','gizarte','ikt'],
+    grouping:'Binaka / hirunaka',
+    duration:'1 saio',
+    resources:['Ihes-gela birtuala (weba)','QR txartelak (inprimagarria)'],
+    levels:{
+      dbh1:{fit:'g',note:'Ihes-gela jolasa talde txikietan, galdera errazagoak.'},
+      dbh2:{fit:'g',note:'Ihes-gela osoa, kultura eta geografia galderak.'},
+      dbh3:{fit:'g',note:'Ihes-gela + hausnarketazko galdera gehigarriak.'},
+      dbh4:{fit:'g',note:'Ihes-gela + ondorengo hausnarketa sakona familiekin partekatzeko.'},
+      batxi1:{fit:'g',note:'Ihes-gela erronka gisa, herri eta artista guztiak identifikatu.'},
+      batxi2:{fit:'g',note:'Ihes-gela eta kultura erreferentzien analisi kritikoa.'},
+    },
+    connections:[],
+    connDesc:''
+  },
+  {
+    id:7, name:'OMENALDIA',
+    desc:'24. Korrikako omendua: ERRIGORA, auzolana eta elikadura burujabetza euskararen alde. Ikerketa: Errigoraren balioak, saskiak, Agerraldiaren bideoa. Saskia propioa diseinatu (8 produktu) eta euskaltzaleen proiektu bat proposatu. «Eskutik Eskura» kanpaina (otsailak 26 – martxoak 17).',
+    subjects:['tutoritza','gizarte','euskara','artea'],
+    grouping:'Banakakoa + talde handia',
+    duration:'1-2 saio',
+    resources:['Errigoraren weba','Agerraldiaren bideoa','Saskiaren txantiloia (Drive)','Kartelaren txantiloia'],
+    levels:{
+      dbh1:{fit:'n',note:''},
+      dbh2:{fit:'y',note:'Errigorari buruzko oinarrizko ikerketa, saskia diseinatu 8 produkturekin.'},
+      dbh3:{fit:'y',note:'Ikerketa sakonagoa: balioak, Agerraldia... Euskaltzaleen proiektua proposatu.'},
+      dbh4:{fit:'g',note:'Ekintzailetza soziala eta elikadura burujabetza. Errigoraren eredua aztertu.'},
+      batxi1:{fit:'g',note:'Dimentsio ekonomikoa eta politikoa: %25 nola banatzen den, finantzaketa soziala.'},
+      batxi2:{fit:'y',note:'Auzolan kontzeptuaren analisi kritikoa, ekonomia sozialarekin lotura.'},
+    },
+    connections:[10],
+    connDesc:'Errigoraren balioak eta 10. jarduerako (Jalgi hadi) dokumentala euskararen egoerarekin lotzen dira.'
+  },
+  {
+    id:8, name:'LEKUKOA',
+    desc:'Lekukoaren historia: Remigio Mendibururen jatorrizkoa (San Telmo Museoa), Juan Gorriren kopia, eta bideoklipeko Jose Ramon Andaren eskulturak. Lekuko berri bat diseinatu (zirriborroak → diseinu definitiboa) eta 5. jarduerako bertsoekin murala osatu.',
+    subjects:['artea','euskara'],
+    grouping:'Banakakoa',
+    duration:'1-2 saio',
+    resources:['Bideoa lekukoaren historiari buruz (weba)','A3 papera/kartoia'],
+    levels:{
+      dbh1:{fit:'n',note:''},
+      dbh2:{fit:'y',note:'Lekukoaren historia ikusi, diseinu artistikoa egin (marrazkia).'},
+      dbh3:{fit:'g',note:'Lekuko berria diseinatu + 5. jarduerako bertsoekin mural integratua.'},
+      dbh4:{fit:'g',note:'Erakusketa antolatu ikastetxean: «24. Korrika — Euskal artista berriak».'},
+      batxi1:{fit:'y',note:'Artearen transmisioa: Mendiburu → Gorri → Anda. Analisi artistikoa.'},
+      batxi2:{fit:'n',note:''},
+    },
+    connections:[5],
+    connDesc:'5. jarduerako (Mezua) bertsoekin elkartuz, mural artistiko integratu bat sortzen da. Erakusketa bateratua.'
+  },
+  {
+    id:9, name:'KORRILINPIADAK',
+    desc:'11 egun eta 10 gau gelditu gabe lasterketa egiteak dakartzan oztopoak ikusi (bideoa). Erreleboen lasterketa kooperatiboa 5 oztopo progresiborekin: zakuan, lekukoa hankartean, bi koltxoneta mugituz, bankuetan oreka, eta koltxoneta tiratuz.',
+    subjects:['gorphez'],
+    grouping:'4ko taldeak',
+    duration:'1 saio (+ prestaketa)',
+    resources:['Bideoa oztopoei buruz (weba)','Zakuak, bankuak, koltxonetak, lekukoa'],
+    levels:{
+      dbh1:{fit:'g',note:'5 oztopo kooperatiboak taldeka, arauak ulertu eta taldean lagundu.'},
+      dbh2:{fit:'g',note:'Oztopoak gainditu eta estrategiak eztabaidatu.'},
+      dbh3:{fit:'g',note:'Autonomia handiagoz antolatu, oztopo berriak proposatu.'},
+      dbh4:{fit:'g',note:'Oztopoak diseinatu eta beste talde batzuei proposatu.'},
+      batxi1:{fit:'g',note:'Lasterketa antolatu eta zuzendu, epaile rola hartu.'},
+      batxi2:{fit:'g',note:'Lasterketa antolatu maila txikiagoentzat, lidergo kooperatiboa.'},
+    },
+    connections:[],
+    connDesc:''
+  },
+  {
+    id:10, name:'JALGI HADI',
+    desc:'«Jalgi Hadi» dokumentalaren trailerra ikusi, euskararen egungo egoerari buruzkoa. Ander Iriarte, Idurre Eskisabel, Lurdes Etxezarreta eta Ane Elordiren hitzak aztertu fitxa batekin. Albisteak bilatu berria.eus-en. Crowdfunding-aren hausnarketa.',
+    subjects:['euskara','tutoritza','gizarte'],
+    grouping:'Talde txikia + talde handia',
+    duration:'1-2 saio',
+    resources:['Trailerra (weba)','Fitxa (Drive)','berria.eus'],
+    levels:{
+      dbh1:{fit:'n',note:''},
+      dbh2:{fit:'n',note:''},
+      dbh3:{fit:'g',note:'Dokumentala aztertu, fitxa bete, eztabaida talde txikietan.'},
+      dbh4:{fit:'g',note:'Albiste bilaketa berria.eus-en + eztabaida zabaldua + crowdfunding.'},
+      batxi1:{fit:'g',note:'Analisi kritiko soziolinguistikoa. Crowdfunding-aren hausnarketa sakona.'},
+      batxi2:{fit:'g',note:'Hizkuntza legediarekin lotura. Euskararen aurkako erasoaldien analisia.'},
+    },
+    connections:[7],
+    connDesc:'Euskararen egoera 7. jarduerarekin (Omenaldia / Errigora) loturik dago: biak hizkuntza biziberritzeari buruz.'
+  },
+  {
+    id:11, name:'PLAZARA DANTZARA!',
+    desc:'24. Korrikako koreografia ofiziala ikasi (tutoriala ikusi) eta kalejira batean integratu (zirkuluan eskutik, estribilloan koreografia). Kidetze bidez ikasle txikienei irakatsi. Talde bakoitzak bere koreografia propioa sortu (dantza urbanoa, garaikidea, tradizionala...) eta erakusketa antolatu.',
+    subjects:['musika','gorphez','artea'],
+    grouping:'Banakakoa / binaka / taldeak',
+    duration:'1-2 saio',
+    resources:['Koreografiaren tutoriala (weba)','Korrika Gazteako espazioa'],
+    levels:{
+      dbh1:{fit:'g',note:'Koreografia ofiziala ikasi eta kalejira bidezko dantzaldia.'},
+      dbh2:{fit:'g',note:'Koreografia + kidetze bidez txikienei irakatsi.'},
+      dbh3:{fit:'g',note:'Koreografia propioa sortu taldeka, estilo librean.'},
+      dbh4:{fit:'g',note:'Erakusketa antolatu bertsio desberdinekin, dantza mistoa.'},
+      batxi1:{fit:'g',note:'Koreografia sortu eta ikastetxeko erakusketa zuzendu.'},
+      batxi2:{fit:'g',note:'Mini-ikuskizuna antolatu beste ikastetxeekin elkarlanean.'},
+    },
+    connections:[2,13],
+    connDesc:'2. jarduerako (Kanta) musika erabiltzen du. Korrika Gaztean (13.) dantzatu daiteke.'
+  },
+  {
+    id:12, name:'KORRIKAREN AHIZPAK',
+    desc:'Munduan zehar Korrikaren antzeko 9 lasterketa daude, hizkuntza minorizatuen alde. 9 taldetan banatu, bakoitzak «ahizpa» bat ikertu (Korrika munduan atala): izena, hizkuntza, kokapena, hiztun kopurua, ikurra. Murala edo aurkezpen digitala egin. Ahizpen kantak entzun.',
+    subjects:['gizarte','euskara','ikt'],
+    grouping:'~3ko taldeak',
+    duration:'1-2 saio',
+    resources:['Korrika munduan (weba)','Mapa digitala / fisikoa'],
+    levels:{
+      dbh1:{fit:'n',note:''},
+      dbh2:{fit:'n',note:''},
+      dbh3:{fit:'g',note:'9 ahizpen ikerketa eta murala/aurkezpena: izena, hizkuntza, kokapena.'},
+      dbh4:{fit:'g',note:'Ikerketa sakonagoa: hiztun kopuruak, egoera soziolinguistikoa.'},
+      batxi1:{fit:'g',note:'Hizkuntza politiken konparaketa: Correllengua, Ar Redadeg...'},
+      batxi2:{fit:'g',note:'Europako hizkuntza minorizatuen azterketa konparatiboa: legedia eta biziberritzea.'},
+    },
+    connections:[],
+    connDesc:''
+  },
+  {
+    id:13, name:'KORRIKA GAZTEA',
+    desc:'Egun handia! Prestatu diren pegatina eta pankartak hartu eta Korrika Gaztean parte hartu udalerriko beste ikastetxeekin. Argazkiak eta bideoak egin eta sare sozialetan partekatu #Korrika24 traolarekin.',
+    subjects:['tutoritza'],
+    grouping:'Ikastetxe osoa / udalerria',
+    duration:'1 egun',
+    resources:['Pankartak (deskargagarriak)','Petoak / pegatinak'],
+    levels:{
+      dbh1:{fit:'g',note:'Lasterketara joan pankartekin eta gogoz parte hartu.'},
+      dbh2:{fit:'g',note:'Parte hartu eta argazki/bideoak egin sare sozialetarako.'},
+      dbh3:{fit:'g',note:'Parte hartu eta unitate didaktikoko lanak erakutsi.'},
+      dbh4:{fit:'g',note:'Korrika Gaztea antolatzeko lagundu, lidergo rola.'},
+      batxi1:{fit:'g',note:'Antolakuntzan lagundu eta ikasle txikiak gidatu.'},
+      batxi2:{fit:'g',note:'Dokumentazio multimedia egin eta sare sozialetan kudeatu.'},
+    },
+    connections:[3,11],
+    connDesc:'3. jarduerako (Ipuina) antzezlana aurkeztu daiteke. 11. jarduerako (Plazara dantzara!) koreografia dantzatu.'
+  },
+  {
+    id:14, name:'HURRENGORA ARTE!',
+    desc:'Bukaerako hausnarketa sakona: Korrikako argazki/bideoak ikusi, lekukoaren mezua aztertu (nork idatzi? zer dio?), 25. Korrikarako gogoeta (noiz? zer lema? nori omenaldia?). Komunikazio kanpaina sortu (lema + kartela + spot bideoa) #25.Korrika traolarekin. Konpromiso linguistikoen orria betetzea.',
+    subjects:['euskara','tutoritza','ikt','artea'],
+    grouping:'Talde txikia + banakakoa',
+    duration:'2-3 saio',
+    resources:['Lekukoaren mezua (weba)','Kanpainaren gida (Drive)','Konpromiso orria (txantiloia)'],
+    levels:{
+      dbh1:{fit:'y',note:'Argazkiak eta bideoak ikusi, ebaluazio sinplea, esperientzia partekatu.'},
+      dbh2:{fit:'y',note:'Ebaluazioa + lekukoaren mezua irakurri eta komentatu.'},
+      dbh3:{fit:'g',note:'Komunikazio kanpaina osoa sortu: lema + kartela + spot bideoa.'},
+      dbh4:{fit:'g',note:'Kanpaina + konpromiso linguistikoen orria bete eta partekatu.'},
+      batxi1:{fit:'g',note:'Kanpaina osoa: plangintza, sorkuntza eta hausnarketa kritikoa.'},
+      batxi2:{fit:'g',note:'Lekukoaren mezuaren analisia + konpromiso linguistikoa hausnarketa etiko gisa.'},
+    },
+    connections:[1],
+    connDesc:'1. jarduerak (Zer da Korrika?) unitatearen hasiera markatzen du; 14.ak bukaera eta hurrengorako bidea.'
+  },
+];
+
+const CRITERIA = [
+  {level:'DBH1',badge:'b1',age:'12-13 urte',
+    text:'Jarduera ludikoak, bizipenezkoak eta gidatuak lehenesten dira. Korrikaren oinarrizko kontzeptuak, kanta eta musikograma, mapa jarraipena, ihes-gela, lasterketa kooperatiboa, koreografia eta Korrika Gaztean parte-hartzea. Autonomia maila baxua, irakaslearen gidatze aktiboa.'},
+  {level:'DBH2',badge:'b2',age:'13-14 urte',
+    text:'DBH1eko oinarriaren gainean, ipuinaren ulermena eta eztabaida, kopla sinpleen sorkuntza, lekukoaren diseinu artistikoa eta Errigorari buruzko oinarrizko ikerketa gehitzen dira. Hasi autonomian, baina oraindik laguntzarekin.'},
+  {level:'DBH3',badge:'b3',age:'14-15 urte',
+    text:'Unitate osoa maila ertainean. Proiektu kooperatibo nagusia (antzerki osoa), «Jalgi Hadi» dokumentalaren analisia, Korrikaren ahizpen ikerketa, eta komunikazio kanpainaren sorkuntza. Talde-lana autonomoagoa, erantzukizun banandua.'},
+  {level:'DBH4',badge:'b4',age:'15-16 urte',
+    text:'DBH3ren antzekoa, baina autonomia eta eskakizun handiagoarekin. Zortziko txikia osoa bertsolarismoan, Errigoraren ekintzailetza soziala, albiste bilaketa eta eztabaida zabaldua, erakusketak antolatu. Lidergoa eta pentsamendu kritikoa.'},
+  {level:'BATXI1',badge:'bb1',age:'16-17 urte',
+    text:'Analisi soziolinguistiko kritikoa nagusitzen da: «Jalgi Hadi» sakonki, hizkuntza politiken konparaketa, Errigoraren dimentsio ekonomikoa, komunikazio kanpaina profesionala. Hausnarketa autonomoa eta argumentazio landua.'},
+  {level:'BATXI2',badge:'bb2',age:'17-18 urte',
+    text:'Maila akademiko eta etikoa: hizkuntza legediarekin lotura, Europako hizkuntza minorizatuen azterketa konparatiboa, bertsolarismoa ondare immaterial gisa, lekukoaren mezuaren analisi sakona eta konpromiso linguistiko pertsonala hausnarketa etiko moduan.'},
+];
+
+const CONNECTIONS = [
+  {acts:[1,14],title:'Zikloa: hasiera → bukaera',
+    desc:'1. jarduerak (Zer da Korrika?) unitatearen hasiera markatzen du; 14.ak (Hurrengora arte!) bukaera eta hurrengorako bidea.'},
+  {acts:[5,8],title:'Bertsoak + Lekukoa = Murala',
+    desc:'5. jarduerako (Mezua) bertsoak eta 8.ko (Lekukoa) diseinuak elkartuz, mural artistiko integratu bat sortzen da.'},
+  {acts:[2,11],title:'Kanta → Koreografia',
+    desc:'2. jarduerako (Kanta) musika 11.ko (Plazara dantzara!) koreografia ofizialean erabiltzen da.'},
+  {acts:[3,13],title:'Ipuina → Korrika Gaztea',
+    desc:'3. jarduerako (Ipuina) antzerki proiektua 13.ko (Korrika Gaztea) egunean aurkeztu daiteke kidetze bidez.'},
+  {acts:[7,10],title:'Omenaldia ↔ Jalgi hadi',
+    desc:'Errigoraren balioak (7.) eta «Jalgi Hadi» dokumentala (10.) euskararen biziberritze prozesuarekin lotzen dira.'},
+  {acts:[11,13],title:'Dantzara! → Korrika Gaztea',
+    desc:'11. jarduerako (Plazara dantzara!) koreografia 13. jarduerako (Korrika Gaztea) egunean dantzatu daiteke.'},
+];
+
+// STATE
+let activeLevel = null;
+let activeSubject = null;
+let openAct = null;
+
+// BUILD
+function buildFilters() {
+  document.getElementById('levelFilters').innerHTML = LEVELS.map(l =>
+    `<button class="pill" data-level="${l.id}" onclick="toggleLevel('${l.id}')">${l.name}</button>`
+  ).join('');
+  document.getElementById('subjectFilters').innerHTML = SUBJECTS.map(s =>
+    `<button class="pill" data-sub="${s.id}" onclick="toggleSubject('${s.id}')">${s.name}</button>`
+  ).join('');
+}
+
+function buildTable() {
+  document.getElementById('tableHead').innerHTML = `<th>Jarduera</th>` +
+    LEVELS.map(l => `<th>${l.name}<br><span style="font-weight:400;font-size:0.65rem;opacity:0.6">${l.age}</span></th>`).join('');
+  renderRows();
+}
+
+function renderRows() {
+  const tbody = document.getElementById('tableBody');
+  tbody.innerHTML = '';
+  ACTS.forEach(act => {
+    const matchesSub = !activeSubject || act.subjects.includes(activeSubject);
+    const tr = document.createElement('tr');
+    tr.dataset.actId = act.id;
+    if (openAct === act.id) tr.classList.add('active-row');
+    if (!matchesSub) tr.style.opacity = '0.2';
+
+    const subTags = act.subjects.map(s => {
+      const sub = SUBJECTS.find(x => x.id === s);
+      return `<span class="tiny-tag">${sub.name}</span>`;
+    }).join('');
+
+    let cells = `<td><div class="act-name-cell"><span class="act-num">${act.id}</span><div><div class="act-label">${act.name}</div><div class="act-subjects">${subTags}</div></div></div></td>`;
+
+    LEVELS.forEach(lv => {
+      const data = act.levels[lv.id];
+      let cls='empty', label='—';
+      if (data && data.fit==='g') { cls='green'; label='✓'; }
+      else if (data && data.fit==='y') { cls='yellow'; label='~'; }
+      const dimmed = activeLevel && activeLevel !== lv.id ? ' dimmed' : '';
+      cells += `<td class="${dimmed}"><span class="cell-dot ${cls}">${label}</span></td>`;
+    });
+
+    tr.innerHTML = cells;
+    tr.addEventListener('click', () => toggleDetail(act.id));
+    tbody.appendChild(tr);
+  });
+}
+
+function toggleDetail(actId) {
+  const panel = document.getElementById('detailPanel');
+  if (openAct === actId) {
+    openAct = null;
+    panel.classList.remove('open');
+    clearHighlights();
+    renderRows();
+    return;
+  }
+  openAct = actId;
+  const act = ACTS.find(a => a.id === actId);
+  renderDetail(act);
+  panel.classList.add('open');
+  renderRows();
+  highlightConnected(act);
+  setTimeout(() => panel.scrollIntoView({behavior:'smooth',block:'nearest'}), 100);
+}
+
+function renderDetail(act) {
+  const inner = document.getElementById('detailInner');
+  const resList = act.resources.map(r => `· ${r}`).join('<br>');
+
+  let levelNotes = '';
+  LEVELS.forEach(lv => {
+    const data = act.levels[lv.id];
+    if (data && data.note) {
+      const cls = data.fit === 'g' ? 'ln-green' : 'ln-yellow';
+      const fitLabel = data.fit === 'g' ? 'Oso gomendatua' : 'Egokigarria';
+      levelNotes += `<div class="ln-card ${cls}"><div class="ln-level">${lv.long} — ${fitLabel}</div>${data.note}</div>`;
+    }
+  });
+
+  let connHtml = '';
+  if (act.connections.length > 0) {
+    const pills = act.connections.map(cid => {
+      const ca = ACTS.find(a => a.id === cid);
+      return `<span class="conn-pill" onclick="event.stopPropagation();toggleDetail(${cid})">${cid}. ${ca.name}</span>`;
+    }).join('');
+    connHtml = `<div class="conn-section"><div class="conn-title">Lotutako jarduerak</div><p style="font-size:0.85rem;color:#555;margin-bottom:0.5rem;">${act.connDesc}</p><div class="conn-pills">${pills}</div></div>`;
+  }
+
+  inner.innerHTML = `
+    <button class="detail-close" onclick="event.stopPropagation();toggleDetail(${act.id})">✕</button>
+    <div class="detail-header"><span class="d-num">${String(act.id).padStart(2,'0')}</span><span class="d-title">${act.name}</span></div>
+    <p class="detail-desc">${act.desc}</p>
+    <div class="detail-meta-grid">
+      <div class="meta-card"><div class="mc-label">Arloak</div><div class="mc-value">${act.subjects.map(s => SUBJECTS.find(x=>x.id===s).name).join(', ')}</div></div>
+      <div class="meta-card"><div class="mc-label">Taldekatzea</div><div class="mc-value">${act.grouping}</div></div>
+      <div class="meta-card"><div class="mc-label">Iraupena</div><div class="mc-value">${act.duration}</div></div>
+      <div class="meta-card"><div class="mc-label">Baliabideak</div><div class="mc-value" style="font-size:0.8rem;line-height:1.5">${resList}</div></div>
+    </div>
+    <div class="level-notes-title">Ohar pedagogikoa kurtsoaren arabera</div>
+    <div class="level-notes-grid">${levelNotes}</div>
+    ${connHtml}`;
+}
+
+function highlightConnected(act) {
+  document.querySelectorAll('tbody tr').forEach(tr => {
+    const id = parseInt(tr.dataset.actId);
+    if (act.connections.includes(id)) tr.classList.add('connected-row');
+  });
+}
+
+function clearHighlights() {
+  document.querySelectorAll('tbody tr').forEach(tr => tr.classList.remove('active-row','connected-row'));
+}
+
+function toggleLevel(id) {
+  activeLevel = activeLevel === id ? null : id;
+  document.querySelectorAll('#levelFilters .pill').forEach(p => p.classList.toggle('active', p.dataset.level === activeLevel));
+  renderRows();
+}
+
+function toggleSubject(id) {
+  activeSubject = activeSubject === id ? null : id;
+  document.querySelectorAll('#subjectFilters .pill').forEach(p => p.classList.toggle('active-sub', p.dataset.sub === activeSubject));
+  renderRows();
+}
+
+function buildCriteria() {
+  document.getElementById('criteriaGrid').innerHTML = CRITERIA.map(c => `
+    <div class="criteria-card"><div class="cc-header"><span class="cc-badge ${c.badge}">${c.level}</span><span class="cc-title">${c.age}</span></div><p class="cc-body">${c.text}</p></div>
+  `).join('');
+}
+
+function buildConnections() {
+  document.getElementById('connMap').innerHTML = CONNECTIONS.map(c => {
+    const labels = c.acts.map(id => { const a=ACTS.find(x=>x.id===id); return `${id}. ${a.name}`; }).join(' ↔ ');
+    return `<div class="conn-card"><div class="conn-card-title">${c.title}</div><p style="font-size:0.72rem;color:var(--more-iluna);margin-bottom:0.3rem;">${labels}</p><p class="conn-card-desc">${c.desc}</p></div>`;
+  }).join('');
+}
+
+// INIT
+buildFilters();
+buildTable();
+buildCriteria();
+buildConnections();
+</script>
+</body>
+</html>
